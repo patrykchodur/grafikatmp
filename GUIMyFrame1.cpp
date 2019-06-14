@@ -111,6 +111,7 @@ void GUIMyFrame1::Wages_Calculate(wxCommandEvent& event)
 	value_wage_3->SetValue(text3);
 	value_wage_4->SetValue(text4);
 
+	repaint_graph();
 }
 
 void GUIMyFrame1::Rotate_Bitmap(wxCommandEvent& event)
