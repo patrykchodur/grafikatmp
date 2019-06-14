@@ -1,4 +1,4 @@
-#include <wx-3.0/wx/wx.h>
+#include <wx/wx.h>
 #include <memory>
 #include "GUIMyFrame1.h"
 
