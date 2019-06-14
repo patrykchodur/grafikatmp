@@ -4,6 +4,7 @@
 #include "graph.hpp"
 
 #include <string>
+#include <wx/log.h>
 
 // for wxGraphicContext
 // #include <wx/graphics.h>
@@ -15,12 +16,13 @@ GUIMyFrame1::GUIMyFrame1( wxWindow* parent )
 MyFrame1( parent )
 {
 	wxInitAllImageHandlers();
-	
+	m_file_dialog = std::make_shared<wxFileDialog>(this, _("Choose a file"), _(""), _(""), _("."), wxFD_OPEN);
+
 }
 
 void GUIMyFrame1::MainFormClose(wxCloseEvent& event)
 {
-	
+	this->Close();
 }
 
 void GUIMyFrame1::repaint() {
@@ -33,7 +35,7 @@ void GUIMyFrame1::repaint() {
 	dc.DrawBitmap(bitmap, 0, 0);
 
 
-	image.image.SaveFile("test.png", wxBITMAP_TYPE_PNG);
+	// image.image.SaveFile("test.png", wxBITMAP_TYPE_PNG);
 }
 
 void GUIMyFrame1::repaint_graph() {
@@ -59,6 +61,19 @@ void GUIMyFrame1::click_button_load(wxCommandEvent& event)
 	tmpimg.LoadFile("1.png", wxBITMAP_TYPE_PNG);
 	image = tmpimg;
 
+	wxString filename;
+	m_file_dialog->SetWildcard("BMP files (.bmp)|.bmp");
+	if (m_file_dialog->ShowModal() == wxID_OK) {
+		filename = m_file_dialog->GetPath();
+
+		wxImage tmpimg;
+
+		if (!tmpimg.LoadFile(filename, wxBITMAP_TYPE_BMP))
+			wxLogError(_("Nie można załadowa obrazka"));
+		else {
+			image = tmpimg;
+		}
+	}
 
 	repaint();
 }
@@ -110,6 +125,8 @@ void GUIMyFrame1::Wages_Calculate(wxCommandEvent& event)
 	value_wage_2->SetValue(text2);
 	value_wage_3->SetValue(text3);
 	value_wage_4->SetValue(text4);
+
+	value_variation->SetLabel(std::to_string(*error_vec.rbegin()));
 
 	repaint_graph();
 }

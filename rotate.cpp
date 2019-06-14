@@ -174,9 +174,12 @@ float error(const ImageHolder& img, const Angle& angle, const Factors& factors) 
 	// calculate mean squared error
 	for (auto iter = 0; iter < size.GetWidth() * size.GetHeight(); iter++) {
 		auto point = wxPoint(iter % size.GetWidth(), iter / size.GetWidth());
-		result += sq(img.image.GetRed(point.x, point.y) - after.image.GetRed(point.x, point.y));
-		result += sq(img.image.GetGreen(point.x, point.y) - after.image.GetGreen(point.x, point.y));
-		result += sq(img.image.GetBlue(point.x, point.y) - after.image.GetBlue(point.x, point.y));
+		auto iter_rgb = iter * 3;
+		auto org_ptr = img.image.GetData();
+		auto after_ptr = after.image.GetData();
+		result += sq(org_ptr[iter_rgb + 0] - after_ptr[iter_rgb + 0]);
+		result += sq(org_ptr[iter_rgb + 1] - after_ptr[iter_rgb + 1]);
+		result += sq(org_ptr[iter_rgb + 2] - after_ptr[iter_rgb + 2]);
 	}
 
 	return result;
