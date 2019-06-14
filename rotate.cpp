@@ -48,7 +48,16 @@ ImageHolder rotate(const ImageHolder& img, const Angle& angle, const Factors& fa
 	// checking whether image has alpha channel
 	auto hasAlpha = img.image.HasAlpha();
 
+	auto colours = std::vector<std::pair<float, wxColour>>();
+	colours.reserve(4);
+
+	auto points = std::vector<wxPoint>();
+	points.reserve(4);
+
 	for (auto iter = 0; iter < newSize.GetWidth() * newSize.GetHeight() ; iter++) {
+
+		colours.clear();
+		points.clear();
 
 		// calculating properties dependent on pixel position
 		auto currentPoint = wxPoint(iter % newSize.GetWidth(), iter / newSize.GetWidth());
@@ -58,13 +67,24 @@ ImageHolder rotate(const ImageHolder& img, const Angle& angle, const Factors& fa
 		auto prevPoint = FloatPoint(prevOrigin.x - std::cos(alfa) * currentDistanceFromOrigin, prevOrigin.y - std::sin(alfa) * currentDistanceFromOrigin);
 		
 		// vectors for columns and points
-		auto colours = std::vector<std::pair<float, wxColour>>();
-		auto points = std::vector<wxPoint>();
+		// auto colours = std::vector<std::pair<float, wxColour>>();
+		// colours.reserve(4);
+		// auto points = std::vector<wxPoint>();
+		// points.reserve(4);
 
-		points.push_back(wxPoint(int(prevPoint.x), int(prevPoint.y)));
-		points.push_back(wxPoint(int(prevPoint.x), int(prevPoint.y) + 1));
-		points.push_back(wxPoint(int(prevPoint.x) + 1, int(prevPoint.y) + 1));
-		points.push_back(wxPoint(int(prevPoint.x) + 1, int(prevPoint.y)));
+		int current_data_iter_rgb = currentPoint.x * 3 + currentPoint.y * newSize.GetWidth() * 3;
+		auto current_data_rgb_ptr = newImg.GetData();
+		auto prev_data_rgb_ptr = img.image.GetData();
+
+		int current_data_iter_alpha = currentPoint.x + currentPoint.y * newSize.GetWidth();
+		auto current_data_alpha_ptr = newImg.GetAlpha();
+		auto prev_data_alpha_ptr = img.image.GetData();
+
+
+		points.emplace_back(int(prevPoint.x), int(prevPoint.y));
+		points.emplace_back(int(prevPoint.x), int(prevPoint.y + 1));
+		points.emplace_back(int(prevPoint.x) + 1, int(prevPoint.y + 1));
+		points.emplace_back(int(prevPoint.x) + 1, int(prevPoint.y));
 
 		// removing points which are not in the previous image
 		points.erase(std::remove_if(points.begin(), points.end(), [&prevSize](const wxPoint& point) {
@@ -72,15 +92,27 @@ ImageHolder rotate(const ImageHolder& img, const Angle& angle, const Factors& fa
 
 		// setting black color for pixels outside of previous image
 		if (points.size() == 0) {
-			newImg.SetRGB(currentPoint.x, currentPoint.y, 0, 0, 0);
+			current_data_rgb_ptr[current_data_iter_rgb + 0] = 0;
+			current_data_rgb_ptr[current_data_iter_rgb + 1] = 0;
+			current_data_rgb_ptr[current_data_iter_rgb + 2] = 0;
+
+
+			// newImg.SetRGB(currentPoint.x, currentPoint.y, 0, 0, 0);
 			if (hasAlpha)
-				newImg.SetAlpha(currentPoint.x, currentPoint.y, 255);
+				current_data_alpha_ptr[current_data_iter_alpha] = 0;
+				// newImg.SetAlpha(currentPoint.x, currentPoint.y, 255);
 			continue;
 		}
 
 		// add to colours vector propper points distance and colour
 		for (const auto& tmpiter : points) {
-			colours.emplace_back(pythag<float>(prevPoint.x - tmpiter.x, prevPoint.y - tmpiter.y), wxColour(img.image.GetRed(tmpiter.x, tmpiter.y), img.image.GetGreen(tmpiter.x, tmpiter.y), img.image.GetBlue(tmpiter.x, tmpiter.y)));
+			colours.emplace_back(pythag<float>(prevPoint.x - tmpiter.x, prevPoint.y - tmpiter.y), wxColour(prev_data_rgb_ptr[tmpiter.x * 3 + tmpiter.y * prevSize.GetWidth() * 3 + 0], prev_data_rgb_ptr[tmpiter.x * 3 + tmpiter.y * prevSize.GetWidth() * 3 + 1], prev_data_rgb_ptr[tmpiter.x * 3 + tmpiter.y * prevSize.GetWidth() * 3 + 2])); 
+
+
+
+
+
+			// colours.emplace_back(pythag<float>(prevPoint.x - tmpiter.x, prevPoint.y - tmpiter.y), wxColour(img.image.GetRed(tmpiter.x, tmpiter.y), img.image.GetGreen(tmpiter.x, tmpiter.y), img.image.GetBlue(tmpiter.x, tmpiter.y)));
 		}
 
 		// sort colours vector starting from the closests
@@ -89,11 +121,10 @@ ImageHolder rotate(const ImageHolder& img, const Angle& angle, const Factors& fa
 
 		float red = 0, green = 0, blue = 0, alpha = 0;
 
-		// in case of distance == 0 FIXME: replace factors[0] with 1
 		if (std::isnan(colours[0].first/colours[0].first)) {
-			red = colours[0].second.Red() * factors[0];
-			green = colours[0].second.Green() * factors[0];
-			blue = colours[0].second.Blue() * factors[0];
+			red = colours[0].second.Red();
+			green = colours[0].second.Green();
+			blue = colours[0].second.Blue();
 		}
 		else {
 			for (int tmpiter = 0; tmpiter < colours.size(); tmpiter++) {
@@ -105,10 +136,27 @@ ImageHolder rotate(const ImageHolder& img, const Angle& angle, const Factors& fa
 			}
 		}
 
+		if (red < 0)
+			red = 0;
+		if (red > 255)
+			red = 255;
+		if (green < 0)
+			green = 0;
+		if (green > 255)
+			green = 255;
+		if (blue < 0)
+			blue = 0;
+		if (blue > 255)
+			blue = 255;
+
 		// set color for current pixel
-		newImg.SetRGB(currentPoint.x, currentPoint.y, red, green, blue);
+		current_data_rgb_ptr[current_data_iter_rgb + 0] = red;
+		current_data_rgb_ptr[current_data_iter_rgb + 1] = green;
+		current_data_rgb_ptr[current_data_iter_rgb + 2] = blue;
+		// newImg.SetRGB(currentPoint.x, currentPoint.y, red, green, blue);
 		if (hasAlpha)
-			newImg.SetAlpha(currentPoint.x, currentPoint.y, alpha);
+			current_data_alpha_ptr[current_data_iter_alpha] = alpha;
+			// newImg.SetAlpha(currentPoint.x, currentPoint.y, alpha);
 	}
 
 	return ImageHolder(newImg, newAngle, img.orgSize);

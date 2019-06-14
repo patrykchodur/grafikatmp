@@ -174,6 +174,13 @@ struct ImageHolder {
 		orgSize = other.orgSize;
 		return *this;
 	}
+
+	ImageHolder& operator=(const wxImage& img) {
+		image = img;
+		orgSize = img.GetSize();
+		angle = 0;
+		return *this;
+	}
 };
 
 struct Factors {

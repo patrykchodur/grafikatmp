@@ -19,9 +19,12 @@ static double error_f(const gsl_vector* x, void* params) {
 	
 
 
-Factors minimalize(const ImageHolder& holder, const Angle& angle, int numb_of_iterations, const Factors& starting_point, const Factors& step_fact) {
+std::pair<Factors, std::vector<float>> minimalize(const ImageHolder& holder, const Angle& angle, int numb_of_iterations, const Factors& starting_point, const Factors& step_fact) {
 	const gsl_multimin_fminimizer_type* type = gsl_multimin_fminimizer_nmsimplex2;
 	gsl_multimin_fminimizer* minimizer_instance = nullptr;
+
+	std::vector<float> error_vector;
+	error_vector.reserve(numb_of_iterations);
 	
 	//starting point
 	auto x = gsl_vector_alloc(4);
@@ -65,6 +68,7 @@ Factors minimalize(const ImageHolder& holder, const Angle& angle, int numb_of_it
 		iter++;
 		status = gsl_multimin_fminimizer_iterate(minimizer_instance);
 
+		error_vector.emplace_back(gsl_multimin_fminimizer_minimum(minimizer_instance));
 		//if (status)
 			//break;
 
@@ -85,6 +89,6 @@ Factors minimalize(const ImageHolder& holder, const Angle& angle, int numb_of_it
 	gsl_multimin_fminimizer_free(minimizer_instance);
 
 
-	return result;
+	return std::pair(result, error_vector);
 }
 	
