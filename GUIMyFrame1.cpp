@@ -1,6 +1,7 @@
 #include "GUIMyFrame1.h"
 #include "minimalize.hpp"
 #include "rotate.hpp"
+#include "graph.hpp"
 
 #include <string>
 
@@ -98,7 +99,7 @@ void GUIMyFrame1::Wages_Calculate(wxCommandEvent& event)
 	auto factrs = result.first;
 	auto error_vec = result.second;
 
-	graph = draw_graph(error_vec, m_panel2.GetSize());
+	graph = draw_graph(error_vec, m_panel2->GetSize());
 
 	auto text1 = std::to_string(factrs[0]);
 	auto text2 = std::to_string(factrs[1]);
@@ -134,7 +135,7 @@ void GUIMyFrame1::Rotate_Bitmap(wxCommandEvent& event)
 
 }
 
-void GUIMyFrame1::Graph_Paint(wxPaintEvent& event)
+void GUIMyFrame1::Graph_Paint(wxUpdateUIEvent& event)
 {
 
 }
