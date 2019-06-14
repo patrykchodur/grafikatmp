@@ -63,12 +63,12 @@ class MyFrame1 : public wxFrame
 		virtual void Angle_Update( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Wages_Calculate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Rotate_Bitmap( wxCommandEvent& event ) { event.Skip(); }
-		virtual void Graph_Paint( wxPaintEvent& event ) { event.Skip(); }
+		virtual void Graph_Paint( wxUpdateUIEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		MyFrame1( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Projekt"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,400 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		MyFrame1( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Projekt"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1000,689 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		
 		~MyFrame1();
 	

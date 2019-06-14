@@ -11,7 +11,7 @@
 
 MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 600,400 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 1000,700 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxHORIZONTAL );
@@ -129,7 +129,7 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	value_angle_control->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyFrame1::Angle_Update ), NULL, this );
 	button_wages->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::Wages_Calculate ), NULL, this );
 	button_rotation->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::Rotate_Bitmap ), NULL, this );
-	m_panel2->Connect( wxEVT_PAINT, wxPaintEventHandler( MyFrame1::Graph_Paint ), NULL, this );
+	m_panel2->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( MyFrame1::Graph_Paint ), NULL, this );
 }
 
 MyFrame1::~MyFrame1()
@@ -145,6 +145,6 @@ MyFrame1::~MyFrame1()
 	value_angle_control->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyFrame1::Angle_Update ), NULL, this );
 	button_wages->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::Wages_Calculate ), NULL, this );
 	button_rotation->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::Rotate_Bitmap ), NULL, this );
-	m_panel2->Disconnect( wxEVT_PAINT, wxPaintEventHandler( MyFrame1::Graph_Paint ), NULL, this );
+	m_panel2->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( MyFrame1::Graph_Paint ), NULL, this );
 	
 }
