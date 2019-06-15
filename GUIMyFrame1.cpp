@@ -6,6 +6,7 @@
 #include <string>
 #include <wx/log.h>
 
+
 // for wxGraphicContext
 // #include <wx/graphics.h>
 
@@ -61,36 +62,15 @@ void GUIMyFrame1::click_button_load(wxCommandEvent& event)
 	// temporarly loading fixed photo
 
 	wxString filename;
-	m_file_dialog->SetWildcard("BMP files (*.bmp)|*.bmp|PNG files(*.png)|*.png|JPEG files(*.jpg;*.jpeg)|*.jpg;*.jpeg");
+	m_file_dialog->SetWildcard("BMP files (*.bmp)|*.bmp");
 	if (m_file_dialog->ShowModal() == wxID_OK) {
 		filename = m_file_dialog->GetPath();
 
-		std::string filename_string(filename);
 		wxImage tmpimg;
+
+		tmpimg.LoadFile(filename, wxBITMAP_TYPE_BMP);
+		image = tmpimg;
 		
-		if (filename_string.find(".bmp") != std::string::npos) {
-			if (!tmpimg.LoadFile(filename, wxBITMAP_TYPE_BMP))
-				wxLogError(_("Nie można załadowa obrazka"));
-			else {
-				image = tmpimg;
-			}
-		}
-
-		if ((filename_string.find(".jpg") != std::string::npos) || (filename_string.find(".jpg") != std::string::npos)) {
-			if (!tmpimg.LoadFile(filename, wxBITMAP_TYPE_JPEG))
-				wxLogError(_("Nie można załadowa obrazka"));
-			else {
-				image = tmpimg;
-			}
-		}
-
-		if (filename_string.find(".png") != std::string::npos) {
-			if (!tmpimg.LoadFile(filename, wxBITMAP_TYPE_PNG))
-				wxLogError(_("Nie można załadowa obrazka"));
-			else {
-				image = tmpimg;
-			}
-		}
 	}
 
 	repaint();
