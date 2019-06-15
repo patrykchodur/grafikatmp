@@ -45,21 +45,21 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	C2_text->Wrap( -1 );
 	bSizer_wagi->Add( C2_text, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
-	value_wage_2 = new wxTextCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
+	value_wage_2 = new wxTextCtrl( this, wxID_ANY, wxT("0"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
 	bSizer_wagi->Add( value_wage_2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	C3_text = new wxStaticText( this, wxID_ANY, wxT("C3:"), wxDefaultPosition, wxDefaultSize, 0 );
 	C3_text->Wrap( -1 );
 	bSizer_wagi->Add( C3_text, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
-	value_wage_3 = new wxTextCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
+	value_wage_3 = new wxTextCtrl( this, wxID_ANY, wxT("0"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
 	bSizer_wagi->Add( value_wage_3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	C4_text = new wxStaticText( this, wxID_ANY, wxT("C4:"), wxDefaultPosition, wxDefaultSize, 0 );
 	C4_text->Wrap( -1 );
 	bSizer_wagi->Add( C4_text, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
-	value_wage_4 = new wxTextCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
+	value_wage_4 = new wxTextCtrl( this, wxID_ANY, wxT("0"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
 	bSizer_wagi->Add( value_wage_4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
