@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_FLAGS "-O2")
 
-add_definitions(-DDISPLAY_MINIMIZER_INFO)
+#add_definitions(-DDISPLAY_MINIMIZER_INFO)
 
 find_package(wxWidgets COMPONENTS core base REQUIRED)
 find_package(GSL REQUIRED)

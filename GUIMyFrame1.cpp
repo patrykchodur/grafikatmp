@@ -22,7 +22,7 @@ MyFrame1( parent )
 
 void GUIMyFrame1::MainFormClose(wxCloseEvent& event)
 {
-	this->Close();
+	this->Destroy();
 }
 
 void GUIMyFrame1::repaint() {
@@ -30,6 +30,7 @@ void GUIMyFrame1::repaint() {
 		return;
 
 	wxClientDC dc(Panel);
+	dc.Clear();
 
 	auto bitmap = wxBitmap(image.image, depth);
 	dc.DrawBitmap(bitmap, 0, 0);
@@ -43,6 +44,7 @@ void GUIMyFrame1::repaint_graph() {
 		return;
 
 	wxClientDC dc(m_panel2);
+	dc.Clear();
 
 	auto bitmap = wxBitmap(graph, depth);
 	dc.DrawBitmap(bitmap, 0, 0);
@@ -57,9 +59,6 @@ void GUIMyFrame1::click_button_load(wxCommandEvent& event)
 {
 	// FIXME: 
 	// temporarly loading fixed photo
-	wxImage tmpimg;
-	tmpimg.LoadFile("1.png", wxBITMAP_TYPE_PNG);
-	image = tmpimg;
 
 	wxString filename;
 	m_file_dialog->SetWildcard("BMP files (.bmp)|.bmp");
